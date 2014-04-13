@@ -1,0 +1,117 @@
+{
+results: [
+{
+zip: 13329,
+lon: -74.7759,
+lat: 43.1022,
+city: "Dolgeville",
+gsid: 3600001,
+name: "James A Green High School",
+state: "NY",
+street: "38 Slawson St",
+country: "US"
+},
+{
+zip: 13329,
+lon: -74.7759,
+lat: 43.1022,
+city: "Dolgeville",
+gsid: 3600002,
+name: "Dolgeville Elementary School",
+state: "NY",
+street: "38 Slawson St",
+country: "US"
+},
+{
+zip: 13456,
+lon: -75.2534,
+lat: 42.9885,
+city: "Sauquoit",
+gsid: 3600003,
+name: "Sauquoit Valley High School",
+state: "NY",
+street: "2601 Oneida St",
+country: "US"
+},
+{
+zip: 13456,
+lon: -75.2534,
+lat: 42.9885,
+city: "Sauquoit",
+gsid: 3600004,
+name: "Sauquoit Valley Elementary School",
+state: "NY",
+street: "2601 Oneida St",
+country: "US"
+},
+{
+zip: 13456,
+lon: -75.2534,
+lat: 42.9885,
+city: "Sauquoit",
+gsid: 3600005,
+name: "Sauquoit Valley Middle School",
+state: "NY",
+street: "2601 Oneida St",
+country: "US"
+},
+{
+zip: 13684,
+lon: -75.1283,
+lat: 44.3609,
+city: "Russell",
+gsid: 3600006,
+name: "Edwards-Knox Elementary School",
+state: "NY",
+street: "2512 County Hwy 24",
+country: "US"
+},
+{
+zip: 12303,
+lon: -73.953,
+lat: 42.7755,
+city: "Schenectady",
+gsid: 3600008,
+name: "Draper Middle School",
+state: "NY",
+street: "2070 Curry Rd",
+country: "US"
+},
+{
+zip: 11713,
+lon: -72.9432,
+lat: 40.7596,
+city: "Bellport",
+gsid: 3600020,
+name: "Bellport Middle School",
+state: "NY",
+street: "35 Kreamer St",
+country: "US"
+},
+{
+zip: 14572,
+lon: -77.6028,
+lat: 42.563,
+city: "Wayland",
+gsid: 3600038,
+name: "Wayland Elementary School",
+state: "NY",
+street: "2350 Rt 63",
+country: "US"
+},
+{
+zip: 13054,
+lon: -75.6772,
+lat: 43.1273,
+city: "Durhamville",
+gsid: 3600045,
+name: "Durhamville School",
+state: "NY",
+street: "5462 Main St",
+country: "US"
+}
+],
+meta: {
+code: 200
+}
+}
