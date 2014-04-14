@@ -152,6 +152,9 @@ function getLocation() {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(useDeviceLocation);
 	}
+	else {
+		alert("Didn't work");
+	}
 }
 
 // Pass current location to main function 
