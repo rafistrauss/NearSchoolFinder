@@ -110,7 +110,7 @@ schools = schools.results;
 
 $(document).ready(function() {
 
-	//function to only allow numbers to be enterred into zip code field
+	//Function to only allow numbers to be entered into zip code field. 
 	$("#zipcodeEntry").keydown(function(event) {
 		// Allow: backspace, delete, tab, escape, and enter
 		if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
@@ -127,41 +127,44 @@ $(document).ready(function() {
 			}
 		}
 	});
-
-	$('#getSchools').on('click', function() {
-		var zip = $('#zipcodeEntry').val();
-		getLatLong(zip);
-	});
+	
+	// Deprecated - add click listener to button to begin searching for closest schools	
+	// $('#getSchools').on('click', function() {
+		// var zip = $('#zipcodeEntry').val();
+		// getLatLong(zip);
+	// });
+	
+	// Add listener if user adds input. If zip code is proper length, pass to function to retrieve latitude/longitude 	
 	$('#zipcodeEntry').on('input', function() {
 		var zip = $('#zipcodeEntry').val();
-		// console.log(zip);
-			$('#zipcodeEntry').removeClass('errorBox successBox');
+		
+		$('#zipcodeEntry').removeClass('errorBox successBox');
 		if(zip.length == 5) {
 			getLatLong(zip);
 		}
 	});
 
-	// var o = getLatLong(10134);
-	// o = o.postalCodes;
-	// var lat = o.lat;
-	// var lon = o.lon;
-	// console.log(lat + lon);
-
+	
 });
 
+//Get current browser/phone location 
 function getLocation() {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(useDeviceLocation);
 	}
+	else {
+		alert("Didn't work");
+	}
 }
 
+// Pass current location to main function 
 function useDeviceLocation(position) {
 	getClosestSchools(position.coords.latitude, position.coords.longitude);
 }
 
+// Get latitude & longitude for this zip. Uses free geocoding provided by geonames 
 function getLatLong(zip) {
-	// var request = 'http://api.geonames.org/postalCodeSearchJSON?postalcode='+ zip + '&maxRows=1&username=rafistrauss';
-	load();
+	load(); // Show loading animation (Pacman!)
 	var url = 'http://api.geonames.org/postalCodeSearchJSON';
 	$.post(url, {
 		postalcode : zip,
@@ -169,34 +172,43 @@ function getLatLong(zip) {
 		maxRows : 1,
 		username : 'rafistrauss'
 	}, function(data) {
-		// console.log(data.postalCodes);
-		// console.log(data);
-		
-		if(typeof data.postalCodes[0] == "undefined") {
-			endLoad();
-			$('#zipcodeEntry').addClass('errorBox');
+		if(typeof data.postalCodes[0] == "undefined") { //Returned value doesn't have the information we need
+			endLoad(); //Hide loading animation
+			$('#zipcodeEntry').addClass('errorBox'); 
 			return false;
 		}
 		var lat = data.postalCodes[0].lat;
 		var lon = data.postalCodes[0].lng;
 
-		getClosestSchools(lat, lon);
+		getClosestSchools(lat, lon); //Get closest school to the provided latitude and longitude
 
 	});
 }
 
+/**
+ * Get the closest schools to the input location and display them to the user
+ * 
+ * @param {float} lat Latitude of user-input location
+ * @param {float} lon Longitude of user-input location
+ */
+
 function getClosestSchools(lat, lon) {
-	displayResults(findClosestSchools(lat, lon));
+	displayResults(findClosestSchools(lat, lon)); 
 
 }
 
+/**
+ * Display the 3 closest schools
+ * 
+ * @param {Array} closestSchools The 3 closest schools to input location
+ */
 function displayResults(closestSchools) {
 	$('#resultsTable > tbody').html("");
 	$.each(closestSchools, function(i, v) {
 		var disp = '<tr>';
 		disp += '<td>' + v.name + '</td>';
 		disp += '<td>' + v.street + ', ' + v.city + ', ' + v.state + ', ' + v.zip + '</td>';
-		disp += '<td>' + (v.distance / 1.609).toFixed(0) + ' miles </td>';
+		disp += '<td>' + (v.distance / 1.609).toFixed(0) + ' miles </td>'; 	//"How 		far 	is 		a 		kilometer?"
 		disp += '</tr>';
 		$('#resultsTable').append(disp);
 	});
@@ -205,22 +217,28 @@ function displayResults(closestSchools) {
 	
 }
 
+
+/**
+ * @param {float} lat Latitude of user-input location
+ * @param {float} lon Longitude of user-input location
+ * @return {Array} The three closest schools to the input location
+ */
 function findClosestSchools(lat, lon) {
-	console.log("Lat: " + lat + ', Long: ' + lon);
+	
 	var schoolDistances = new Array();
 	var closestSchools = [];
 
-	$.each(schools, function(i, v) {
+	$.each(schools, function(i, v) { 		//Iterate through each school and get its distance from input location
 		schoolDistances.push(new Array(i, getDistance(lat, lon, v.lat, v.lon)));
 	});
 
-	schoolDistances.sort(function(a, b) {
-		return a[1] - b[1];
-	});
+	schoolDistances.sort(function(a, b) {	//Sort school by distance. For large data sets, it would be worth optimizing this function
+		return a[1] - b[1];					//by limiting schoolDistances to a maximum of 3 elements and adding/replacing elements if the current
+	});										//element is less than any in schoolDistances.  
 
-	console.log(schoolDistances);
+	
 
-	for (var i = 0; i < 3; i++) {
+	for (var i = 0; i < 3; i++) {			//Retrieve the 3 closest schools
 		schools[schoolDistances[i][0]]['distance'] = schoolDistances[i][1];
 		closestSchools.push(schools[schoolDistances[i][0]]);
 	}
@@ -229,7 +247,14 @@ function findClosestSchools(lat, lon) {
 
 }
 
-//This function from here: http://stackoverflow.com/questions/27928/how-do-i-calculate-distance-between-two-latitude-longitude-points/21623206#21623206
+
+/**
+ * This function from here: http://stackoverflow.com/questions/27928/how-do-i-calculate-distance-between-two-latitude-longitude-points/21623206#21623206 
+ * @param {float} lat1 First latitude point
+ * @param {float} lon1 First longitude point
+ * @param {float} lat2 Second latitude point
+ * @param {float} lon2 Second longitude point
+ */
 function getDistance(lat1, lon1, lat2, lon2) {
 	var R = 6371;
 	var a = 0.5 - Math.cos((lat2 - lat1) * Math.PI / 180) / 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * (1 - Math.cos((lon2 - lon1) * Math.PI / 180)) / 2;
@@ -237,9 +262,17 @@ function getDistance(lat1, lon1, lat2, lon2) {
 	return R * 2 * Math.asin(Math.sqrt(a));
 }
 
+/**
+ * Show loading animation (waka waka waka) 
+ */
+
 function load() {
 	$('#loadingIcon').attr('src', 'loading.gif');
 }
+
+/**
+ * End loading animation 
+ */
 
 function endLoad() {
 	$('#loadingIcon').attr('src', '');
